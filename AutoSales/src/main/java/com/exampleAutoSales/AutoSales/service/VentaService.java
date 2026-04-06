@@ -49,4 +49,62 @@ public class VentaService {
     public Venta getVenta(Integer id) {
         return ventaRepository.buscarPorId(id);
     }
+
+    // reglas de negocio-----------
+    public int calcularComision(Venta venta) {
+
+    int comision = 0;
+
+    if (venta.getCategoriaEjecutivo().equals("Junior")) {
+        comision = venta.getMontoVehiculo() * 2 / 100;
+    } else if (venta.getCategoriaEjecutivo().equals("Senior")) {
+        comision = venta.getMontoVehiculo() * 5 / 100;
+    }
+
+        return comision;
+    }
+
+    public int calcularTotalComisiones(String rut) {
+
+    int total = 0;
+    int contador = 0;
+
+    for (Venta v : ventaRepository.obtenerVentas()) {
+        if (v.getRutEjecutivo().equals(rut)) {
+            total += calcularComision(v);
+            contador++;
+        }
+    }
+
+    if (contador > 3) {
+        total += 200000;
+    }
+
+        return total;
+    }
+
+    public String reporteDesempeno(String rut) {
+
+    int totalVentas = 0;
+    int sumaMontos = 0;
+    int cantidad = 0;
+
+    for (Venta v : ventaRepository.obtenerVentas()) {
+        if (v.getRutEjecutivo().equals(rut)) {
+            sumaMontos += v.getMontoVehiculo();
+            cantidad++;
+        }
+    }
+
+    if (cantidad == 0) {
+        return "No tiene ventas";
+    }
+
+    int promedio = sumaMontos / cantidad;
+
+    return "Total ventas: " + sumaMontos + 
+           " | Promedio: " + promedio;
+    }
+
+    
 }

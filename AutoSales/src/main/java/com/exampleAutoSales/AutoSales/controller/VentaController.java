@@ -47,4 +47,13 @@ public class VentaController {
     public String eliminarEquipaje(@PathVariable Integer id){
         return ventaService.deleteVenta(id);
     }
+    @GetMapping("/comisiones/{rut}")
+    public int totalComisiones(@PathVariable String rut) {
+        return ventaService.calcularTotalComisiones(rut);
+    }
+
+    @GetMapping("/reporte/{rut}")
+    public String reporte(@PathVariable String rut) {
+        return ventaService.reporteDesempeno(rut);
+    }
 }
